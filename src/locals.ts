@@ -25,7 +25,7 @@ bot.use(composer);
 
 bot.start({
   drop_pending_updates: true,
-  allowed_updates: ["message", "callback_query", "chat_member"],
+  allowed_updates: ["message", "callback_query", "chat_member", "inline_query"],
 });
 
 Deno.addSignalListener("SIGINT", () => bot.stop());
