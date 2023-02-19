@@ -2,9 +2,18 @@ import { Composer, Context } from "grammy/mod.ts";
 
 import { DEVS } from "./constants.ts";
 
-async function isAdmin(ctx: Context) {
-  const admins = await ctx.getChatAdministrators();
-  return admins.some((admin) => admin.user.id === ctx.from?.id);
+function isAdmin(ctx: Context) {
+  // try {
+  //   const admins = await ctx.api.getChatAdministrators(ctx.chat!.id);
+  //   return admins.some((admin) => admin.user.id === ctx.from?.id);
+  // } catch (err) {
+  //   console.error(err);
+  //   return false;
+  // }
+  if (DEVS.includes(ctx.from!.id)) {
+    return true;
+  }
+  return false;
 }
 
 async function safetyValve(ctx: Context, userToBan: number, what: string) {
