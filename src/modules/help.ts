@@ -1,7 +1,7 @@
 import { Composer, InlineKeyboard } from "grammy/mod.ts";
 
 const helptext = `
-**Ultroid Assistant - Help Menu**
+<b>Ultroid Assistant - Help Menu</b>
 - <code>/start</code>: Start the bot.
 - <code>/ping</code>: Check the response time of the bot.
 - <code>/purge</code>: Purge messages from the replied message.
