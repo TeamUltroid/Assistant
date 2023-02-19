@@ -1,10 +1,12 @@
 import config from "../env.ts";
+import composer from "./modules/mod.ts";
 
 import { serve } from "server";
 import { Bot, GrammyError, HttpError, webhookCallback } from "grammy/mod.ts";
 
 const bot = new Bot(config.BOT_TOKEN);
 await bot.init();
+bot.use(composer);
 console.info(`Started as @${bot.botInfo.username}`);
 
 bot.catch((err) => {
@@ -33,5 +35,5 @@ serve(async (req) => {
       }
     }
   }
-  return new Response();
+  return new Response("Welcome!!");
 });
