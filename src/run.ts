@@ -45,7 +45,7 @@ serve(async (req) => {
         fsRoot: "./",
       });
     }
-    return new Response(Deno.readFileSync("./index.html"), {
+    return new Response(await Deno.readTextFile("./index.html"), {
       headers: { "content-type": "text/html" },
     });
   }
