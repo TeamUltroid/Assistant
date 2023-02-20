@@ -52,7 +52,7 @@ composer.on("message", async (ctx) => {
 
   if (ctx.chat?.id == UltroidSupport) {
     // autopaste
-    if ((ctx.message.text!.length ?? 0) > 900) {
+    if (ctx.message.text && ctx.message.text!.length > 900) {
       const res = await fetch("https://paste.xditya.me/api/v2/pastes", {
         method: "POST",
         headers: {
