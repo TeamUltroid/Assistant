@@ -50,7 +50,7 @@ composer
         return;
       }
       await ctx.replyWithSticker(
-        "CAACAgUAAxkBAAIoXmPyJ0iEVIFqxANcFGEjZuk34cgMAAIjCAAC9q1IV2i42zjrpceeLgQ",
+        "CAACAgUAAxkBAAEBEZlj8uwgPnS0awHhvoXDt4sVXcNVUgACPggAAvM5aFQirkyJzD38nS4E",
         {
           reply_to_message_id: ctx.message?.message_id,
         },

@@ -3,9 +3,11 @@ import composer from "./modules/mod.ts";
 
 import { serve } from "server";
 import { Bot, GrammyError, HttpError, webhookCallback } from "grammy/mod.ts";
+import { autoQuote } from "autoQuote";
 
 const bot = new Bot(config.BOT_TOKEN);
 await bot.init();
+bot.use(autoQuote);
 bot.use(composer);
 console.info(`Started as @${bot.botInfo.username}`);
 
