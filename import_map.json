@@ -5,6 +5,7 @@
     "server": "https://deno.land/std@0.154.0/http/server.ts",
     "grammy/": "https://deno.land/x/grammy@v1.14.1/",
     "mongo": "https://deno.land/x/mongo@v0.31.1/mod.ts",
-    "autoQuote": "https://deno.land/x/grammy_autoquote@v1.1.1/mod.ts"
+    "autoQuote": "https://deno.land/x/grammy_autoquote@v1.1.1/mod.ts",
+    "file_server": "https://deno.land/std@0.177.0/http/file_server.ts"
   }
 }

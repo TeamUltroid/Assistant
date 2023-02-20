@@ -4,6 +4,7 @@ import composer from "./modules/mod.ts";
 import { serve } from "server";
 import { Bot, GrammyError, HttpError, webhookCallback } from "grammy/mod.ts";
 import { autoQuote } from "autoQuote";
+import { serveDir } from "file_server";
 
 const bot = new Bot(config.BOT_TOKEN);
 await bot.init();
@@ -37,5 +38,15 @@ serve(async (req) => {
       }
     }
   }
-  return new Response("Welcome!!");
+  if (req.method == "GET") {
+    const pathname = new URL(req.url).pathname;
+    if (pathname.startsWith("/assets")) {
+      return serveDir(req, {
+        fsRoot: "./",
+      });
+    }
+    return new Response(Deno.readFileSync("./index.html"), {
+      headers: { "content-type": "text/html" },
+    });
+  }
 });
