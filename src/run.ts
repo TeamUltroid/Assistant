@@ -25,24 +25,15 @@ bot.catch((err) => {
 });
 
 const router = new Router();
-const handleUpdate = webhookCallback(bot, "oak");
+// const handleUpdate = webhookCallback(bot, "oak");
 
 router
   .get("/", (ctx) => {
     ctx.response.body = "Hello World!";
   });
 
-router
-  .get(`/${config.BOT_TOKEN}`, async (ctx) => {
-    // webhook path, ending with /botToken
-    try {
-      return await handleUpdate(ctx);
-    } catch (err) {
-      console.error(err);
-    }
-  });
-
 const app = new Application();
+app.use(webhookCallback(bot, "oak"));
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.addEventListener("error", (e) => console.log(e));
