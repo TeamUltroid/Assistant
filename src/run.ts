@@ -1,10 +1,9 @@
 import config from "../env.ts";
 import composer from "./modules/mod.ts";
 
-import { serve } from "server";
+import { Application, Router } from "oak";
 import { Bot, GrammyError, HttpError, webhookCallback } from "grammy/mod.ts";
 import { autoQuote } from "autoQuote";
-import { serveDir } from "file_server";
 
 const bot = new Bot(config.BOT_TOKEN);
 await bot.init();
@@ -25,28 +24,27 @@ bot.catch((err) => {
   }
 });
 
-const handleUpdate = webhookCallback(bot, "std/http");
+const router = new Router();
+const handleUpdate = webhookCallback(bot, "oak");
 
-serve(async (req) => {
-  if (req.method === "POST") {
-    const url = new URL(req.url);
-    if (url.pathname.slice(1) === bot.token) {
-      try {
-        return await handleUpdate(req);
-      } catch (err) {
-        console.error(err);
-      }
+router
+  .get("/", (ctx) => {
+    ctx.response.body = "Hello World!";
+  });
+
+router
+  .get(`/${config.BOT_TOKEN}`, async (ctx) => {
+    // webhook path, ending with /botToken
+    try {
+      return await handleUpdate(ctx);
+    } catch (err) {
+      console.error(err);
     }
-  }
-  if (req.method == "GET") {
-    const pathname = new URL(req.url).pathname;
-    if (pathname.startsWith("/assets")) {
-      return serveDir(req, {
-        fsRoot: "./",
-      });
-    }
-    return new Response(await Deno.readTextFile("./index.html"), {
-      headers: { "content-type": "text/html" },
-    });
-  }
-});
+  });
+
+const app = new Application();
+app.use(router.routes());
+app.use(router.allowedMethods());
+app.addEventListener("error", (e) => console.log(e));
+
+console.log("> Started listeneing on PORT 80!");
