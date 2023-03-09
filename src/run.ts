@@ -28,6 +28,7 @@ bot.catch((err) => {
 const handleUpdate = webhookCallback(bot, "std/http");
 
 serve(async (req) => {
+  console.log("received ", req);
   if (req.method === "POST") {
     const url = new URL(req.url);
     if (url.pathname.slice(1) === bot.token) {
