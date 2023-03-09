@@ -29,7 +29,7 @@ const app = new Application();
 app.use((ctx) => {
   if (ctx.request.method == "POST") {
     if (ctx.request.url.pathname.slice(1) == config.BOT_TOKEN) {
-      return webhookCallback(bot, "oak")(ctx.request);
+      return webhookCallback(bot, "oak")(ctx);
     }
   } else {
     ctx.response.body = "Hello World!";
