@@ -1,7 +1,7 @@
 import config from "../env.ts";
 import composer from "./modules/mod.ts";
 
-import { Application, Router } from "oak";
+import { Application } from "oak";
 import { Bot, GrammyError, HttpError, webhookCallback } from "grammy/mod.ts";
 import { autoQuote } from "autoQuote";
 
@@ -24,18 +24,19 @@ bot.catch((err) => {
   }
 });
 
-const router = new Router();
-// const handleUpdate = webhookCallback(bot, "oak");
-
-router
-  .get("/", (ctx) => {
-    ctx.response.body = "Hello World!";
-  });
-
 const app = new Application();
-app.use(webhookCallback(bot, "oak"));
-app.use(router.routes());
-app.use(router.allowedMethods());
+
+app.use((ctx) => {
+  if (ctx.request.method == "POST") {
+    if (ctx.request.url.pathname.slice(1) == config.BOT_TOKEN) {
+      return webhookCallback(bot, "oak")(ctx.request);
+    }
+  } else {
+    ctx.response.body = "Hello World!";
+  }
+});
+
 app.addEventListener("error", (e) => console.log(e));
 
 console.log("> Started listeneing on PORT 80!");
+await app.listen({ port: 80 });
