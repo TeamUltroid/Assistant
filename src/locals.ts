@@ -28,4 +28,7 @@ bot.start({
   allowed_updates: ["message", "callback_query", "chat_member", "inline_query"],
 });
 
-Deno.addSignalListener(Deno.build.os != "windows" ? "SIGTERM" : "SIGINT", () => bot.stop());
+Deno.addSignalListener(
+  Deno.build.os != "windows" ? "SIGTERM" : "SIGINT",
+  () => bot.stop(),
+);

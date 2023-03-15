@@ -25,22 +25,27 @@ const composer = new Composer();
 
 composer.on("message", async (ctx) => {
   // handle notes - in any chat
-  if (
-    ctx.message.text?.startsWith("#") && ctx.message.text != "#deploy" &&
-    ctx.message.text != "#tutorial" && ctx.message.text != "#bug" &&
-    ctx.message.text != "#request"
-  ) {
-    const noteName = ctx.message.text!.split("#")[1];
-    const noteMsgId = await getNoteMessageId(noteName);
-    if (noteMsgId) {
-      await ctx.api.copyMessage(
-        ctx.chat.id,
-        NOTES_LOG,
-        noteMsgId,
-        {
-          reply_to_message_id: ctx.message.message_id,
-        },
-      );
+  // find the word with starting with #
+  const noteRegex = /#(\w+)/;
+  const noteMatch = noteRegex.exec(ctx.message.text!);
+  if (noteMatch) {
+    const noteWithHashtag = noteMatch[0];
+    const ignoredNotes = ["deploy", "tutorial", "bug", "request"];
+    if (!ignoredNotes.includes(noteWithHashtag)) {
+      const noteName = noteMatch[1];
+      const noteMsgId = await getNoteMessageId(noteName);
+      if (noteMsgId) {
+        await ctx.api.copyMessage(
+          ctx.chat.id,
+          NOTES_LOG,
+          noteMsgId,
+          {
+            reply_to_message_id: ctx.message.reply_to_message?.message_id
+              ? ctx.message.reply_to_message?.message_id
+              : ctx.message.message_id,
+          },
+        );
+      }
     }
   }
 
