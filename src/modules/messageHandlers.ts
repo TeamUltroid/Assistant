@@ -98,7 +98,7 @@ composer.on("message", async (ctx) => {
           return;
         }
       } else msgId = ctx.message.message_id;
-      await ctx.api.copyMessage(
+      const sentMsg = await ctx.api.copyMessage(
         -1001384371830, // UltroidRequests
         ctx.chat.id,
         msgId,
@@ -110,6 +110,15 @@ composer.on("message", async (ctx) => {
             }/${ctx.message.message_id}`,
           )
             .text("Delete Message", "delmsg"),
+        },
+      );
+      await ctx.reply(
+        "Thanks for your feedback! Your message has been saved and would be looked into soon!",
+        {
+          reply_markup: new InlineKeyboard().url(
+            "View Message",
+            `https://t.me/c/${1384371830}/${sentMsg.message_id}`,
+          ),
         },
       );
     }
