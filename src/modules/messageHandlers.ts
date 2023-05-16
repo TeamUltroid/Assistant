@@ -40,12 +40,27 @@ composer.on("message", async (ctx) => {
           NOTES_LOG,
           noteMsgId,
           {
-            reply_to_message_id: ctx.message.reply_to_message?.message_id
-              ? ctx.message.reply_to_message?.message_id
-              : ctx.message.message_id,
+            reply_to_message_id: ctx.message.reply_to_message?.message_id ||
+              ctx.message.message_id,
           },
         );
       }
+    }
+  }
+
+  const regexPattern = /^s\/([^/]+)\/([^/]+)\/?$/;
+  const regexMatch = ctx.message.text?.match(regexPattern);
+  if (regexMatch) {
+    const part1 = regexMatch[1];
+    const part2 = regexMatch[2];
+    const res = ctx.message.text?.replace(part1, part2);
+    try {
+      await ctx.reply(res!, {
+        reply_to_message_id: ctx.message.reply_to_message?.message_id ||
+          ctx.message.message_id,
+      });
+    } catch (err) {
+      await ctx.reply(`Something went wrong! ${err.message}`);
     }
   }
 
@@ -97,7 +112,9 @@ composer.on("message", async (ctx) => {
           await ctx.reply("Reply to a message!");
           return;
         }
-      } else msgId = ctx.message.message_id;
+      } else {
+        msgId = ctx.message.message_id;
+      }
       const sentMsg = await ctx.api.copyMessage(
         -1001384371830, // UltroidRequests
         ctx.chat.id,
