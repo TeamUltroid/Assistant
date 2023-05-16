@@ -51,9 +51,18 @@ composer.on("message", async (ctx) => {
   const regexPattern = /^s\/([^/]+)\/([^/]+)\/?$/;
   const regexMatch = ctx.message.text?.match(regexPattern);
   if (regexMatch) {
+    if (!ctx.message.reply_to_message) {
+      await ctx.reply("Reply to a message!");
+      return;
+    }
+    const replyText = ctx.message.reply_to_message.text || null;
+    if (!replyText) {
+      await ctx.reply("Reply to a text message!");
+      return;
+    }
     const part1 = regexMatch[1];
     const part2 = regexMatch[2];
-    const res = ctx.message.text?.replace(part1, part2);
+    const res = replyText.replace(part1, part2);
     try {
       await ctx.reply(res!, {
         reply_to_message_id: ctx.message.reply_to_message?.message_id ||
@@ -62,6 +71,7 @@ composer.on("message", async (ctx) => {
     } catch (err) {
       await ctx.reply(`Something went wrong! ${err.message}`);
     }
+    return;
   }
 
   // autoforward from UltroidNews to UltroidSupport
