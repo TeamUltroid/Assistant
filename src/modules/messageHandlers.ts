@@ -62,7 +62,7 @@ composer.on("message", async (ctx) => {
     }
     const part1 = regexMatch[1];
     const part2 = regexMatch[2];
-    const res = replyText.replace(part1, part2);
+    const res = replyText.replace(new RegExp(part1, "g"), part2);
     try {
       await ctx.reply(res!, {
         reply_to_message_id: ctx.message.reply_to_message?.message_id ||
